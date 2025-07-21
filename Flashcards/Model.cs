@@ -31,19 +31,18 @@ internal class Model
     public static void CreateStack(string name)
     {
         var connection = new SqlConnection(ConnectionString);
-        string cmd = "insert into stacks vlaues(@Name)";
+        string cmd = "insert into stacks(Name) values (@Name)";
 
         connection.Open();
         connection.Execute(cmd, new { Name = name });
     }
-    
     public static void RenameStack(int id, string name)
     {
         var connection = new SqlConnection(ConnectionString);
         string cmd = "update stacks set Name = @Name where Id = @Id";
 
         connection.Open();
-        connection.Execute(cmd, new { Name = name });
+        connection.Execute(cmd, new { Id = id, Name = name });
     }
     public static void DeleteStack(int id) 
     {
