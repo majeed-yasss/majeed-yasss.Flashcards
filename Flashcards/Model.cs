@@ -36,6 +36,16 @@ internal class Model
         connection.Open();
         connection.Execute(cmd, new { Name = name });
     }
+    public static IEnumerable<T> RetriveRecords<T>() 
+    {
+        var connection = new SqlConnection(ConnectionString);
+        string tableName = TypeToTableName[typeof(T)];
+        string cmd = $"Select * From {tableName}";
+
+        connection.Open();
+        IEnumerable<T> records = connection.Query<T>(cmd);
+        return records;
+    }
     public static void RenameStack(int id, string name)
     {
         var connection = new SqlConnection(ConnectionString);
@@ -52,4 +62,12 @@ internal class Model
         connection.Open();
         connection.Execute(cmd, new { Id = id });
     }
+
+    public static Dictionary<Type, string> TypeToTableName =
+        new Dictionary<Type, string>()
+    {
+        { typeof(DataObjects.Stack), "stacks" },
+        { typeof(DataObjects.Flashcard), "stack_flashcards" },
+        { typeof(DataObjects.StudySession), "study_sessions" },
+    };
 }
