@@ -15,7 +15,7 @@ internal static class Options
         };
     public enum MainMenu { Stacks, Study, Sessions, Exit }
     //public static Dictionary<string, MainMenu> MainMenuLabels = ...
-    public enum WorkingStackMenu { Flashcards, Change, Create, Return }
+    public enum WorkingStackMenu { Flashcards, Change, Create, Delete, Return }
     //public static Dictionary<string, WorkingStackMenu> WorkingStackMenuLabels = ...
     public enum FlashcardsMenu { Create, View, Edit, Delete, Return }
 }
