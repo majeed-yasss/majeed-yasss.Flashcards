@@ -29,13 +29,13 @@ internal class Model
         var connection = new SqlConnection(ConnectionString);
         connection.Open();
     }
-    public static void CreateStack(string name)
+    public static void CreateStack(string Name)
     {
         var connection = new SqlConnection(ConnectionString);
         string cmd = "insert into stacks(Name) values (@Name)";
 
         connection.Open();
-        connection.Execute(cmd, new { Name = name });
+        connection.Execute(cmd, new { Name });
     }
     public static IEnumerable<T> RetriveRecords<T>() where T : ITable
     {
@@ -46,20 +46,20 @@ internal class Model
         IEnumerable<T> records = connection.Query<T>(cmd);
         return records;
     }
-    public static void RenameStack(int id, string name)
+    public static void RenameStack(int Id, string Name)
     {
         var connection = new SqlConnection(ConnectionString);
         string cmd = "update stacks set Name = @Name where Id = @Id";
 
         connection.Open();
-        connection.Execute(cmd, new { Id = id, Name = name });
+        connection.Execute(cmd, new { Id, Name });
     }
-    public static void DeleteStack(int id) 
+    public static void Delete(ITable row) 
     {
         var connection = new SqlConnection(ConnectionString);
         string cmd = "delete from stacks where Id = @Id";
 
         connection.Open();
-        connection.Execute(cmd, new { Id = id });
+        connection.Execute(cmd, new { row.Id });
     }
 }
