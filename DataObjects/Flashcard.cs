@@ -1,6 +1,6 @@
 ﻿namespace DataObjects;
 
-public class Flashcard
+public class Flashcard : ITable
 {
     public int Id { get; set; }
     public int StackID { get; set; }

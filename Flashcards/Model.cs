@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using DataObjects;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -36,7 +37,7 @@ internal class Model
         connection.Open();
         connection.Execute(cmd, new { Name = name });
     }
-    public static IEnumerable<T> RetriveRecords<T>() 
+    public static IEnumerable<T> RetriveRecords<T>() where T : ITable
     {
         var connection = new SqlConnection(ConnectionString);
         string tableName = TypeToTableName[typeof(T)];

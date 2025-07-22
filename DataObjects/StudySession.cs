@@ -1,5 +1,5 @@
 ﻿namespace DataObjects;
-public class StudySession
+public class StudySession : ITable
 {
     public int Id { get; set; }
     public int StackID { get; set; }
