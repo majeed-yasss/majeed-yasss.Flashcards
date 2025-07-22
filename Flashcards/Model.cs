@@ -13,50 +13,48 @@ namespace Flashcards;
 
 internal class Model
 {
-    public static string ConnectionString 
+    public readonly string _connectionString;
+    public Model()
     {
-        get 
-        {
-            var config = new ConfigurationBuilder()
+        var config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
 
-            return config.GetConnectionString("constr");
-        }
+        _connectionString = config.GetConnectionString("constr")?? "";
     }
-    public static void LoadDatabase()
+    public void LoadDatabase()
     {
-        var connection = new SqlConnection(ConnectionString);
+        var connection = new SqlConnection(_connectionString);
         connection.Open();
     }
-    public static void CreateStack(string Name)
+    public void CreateStack(string Name)
     {
-        var connection = new SqlConnection(ConnectionString);
+        var connection = new SqlConnection(_connectionString);
         string cmd = "insert into stacks(Name) values (@Name)";
 
         connection.Open();
         connection.Execute(cmd, new { Name });
     }
-    public static IEnumerable<T> RetriveRecords<T>() where T : ITable
+    public IEnumerable<T> RetriveRecords<T>() where T : ITable
     {
-        var connection = new SqlConnection(ConnectionString);
+        var connection = new SqlConnection(_connectionString);
         string cmd = $"Select * From {T.TableName}";
 
         connection.Open();
         IEnumerable<T> records = connection.Query<T>(cmd);
         return records;
     }
-    public static void RenameStack(int Id, string Name)
+    public void RenameStack(int Id, string Name)
     {
-        var connection = new SqlConnection(ConnectionString);
+        var connection = new SqlConnection(_connectionString);
         string cmd = "update stacks set Name = @Name where Id = @Id";
 
         connection.Open();
         connection.Execute(cmd, new { Id, Name });
     }
-    public static void Delete(ITable row) 
+    public void Delete(ITable row) 
     {
-        var connection = new SqlConnection(ConnectionString);
+        var connection = new SqlConnection(_connectionString);
         string cmd = "delete from stacks where Id = @Id";
 
         connection.Open();
