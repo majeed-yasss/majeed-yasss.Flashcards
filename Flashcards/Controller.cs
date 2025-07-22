@@ -10,34 +10,36 @@ namespace Flashcards;
 public class Controller
 {
     private readonly Model _model = new();
-    private bool _currentStack = false;
+    private static bool _currentStack = false;
     public static void Run()
     {
         while (true) 
         {
-            var option = _currentStack ?
-            View.MainMenu() :
-            Excute(option);
+            if (_currentStack) Excute(View.MainMenu());
+            else Excute(View.WelcomeMenu());
+
         }
     }
     private static void Excute(Options.WelcomeMenu option)
     {
-        //option switch
-        //{
-        //Options.WelcomeMenu.Create ?  => CreateStack(),
-        // _ => View.Exit()
-        //};
+        switch (option)
+        {
+            case Options.WelcomeMenu.Create: CreateStack(); break;
+            default: View.Exit(); break; 
+        }
     }
     private static void Excute(Options.MainMenu option)
     {
-        //option switch
-        //{
-            //Options.MainMenu.Stacks => Stacks(),
-            //Options.MainMenu.Flashcards => Flashcards(),
-            //Options.MainMenu.Sessions => Sessions(),
-            // _ => View.Exit()
-        //};
+         switch (option)
+        {
+            case Options.MainMenu.Stacks: Stacks(); break;
+            case Options.MainMenu.Study: Study(); break;
+            case Options.MainMenu.Sessions: Sessions(); break;
+            default: View.Exit(); break;
+        };
     }
-
-
+    private static void CreateStack()
+    {
+        throw new NotImplementedException();
+    }
 }

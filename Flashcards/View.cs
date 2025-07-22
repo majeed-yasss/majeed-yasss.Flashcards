@@ -26,4 +26,11 @@ internal class View
 
         return Enum.Parse<Options.MainMenu>(option);
     }
+
+    internal static void Exit()
+    {
+        //Console.Clear();
+        Console.WriteLine("exiting..");
+        Environment.Exit(0);
+    }
 }
