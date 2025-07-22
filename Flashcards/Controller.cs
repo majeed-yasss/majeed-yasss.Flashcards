@@ -15,7 +15,8 @@ public class Controller
     {
         while (true) 
         {
-            Options.MainMenu option = View.MainMenu();
+            var option = _currentStack ?
+            View.MainMenu() :
             Excute(option);
         }
     }

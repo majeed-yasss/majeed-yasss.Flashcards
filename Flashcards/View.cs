@@ -1,7 +1,7 @@
 ﻿using DataObjects;
 using Spectre.Console;
 namespace Flashcards;
-internal class Veiw
+internal class View
 {
     public static Options.WelcomeMenu WelcomeMenu()
     {
