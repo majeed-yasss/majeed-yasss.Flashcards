@@ -12,12 +12,12 @@ public class Controller
     {
         while (true) 
         {
-            MenuOption option = View.MainMenu();
+            Options.Menu option = View.MainMenu();
             Excute(option);
         }
     }
 
-    private static void Excute(MenuOption option)
+    private static void Excute(Options.Menu option)
     {
         throw new NotImplementedException();
     }
