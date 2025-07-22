@@ -40,8 +40,7 @@ internal class Model
     public static IEnumerable<T> RetriveRecords<T>() where T : ITable
     {
         var connection = new SqlConnection(ConnectionString);
-        string tableName = TypeToTableName[typeof(T)];
-        string cmd = $"Select * From {tableName}";
+        string cmd = $"Select * From {T.TableName}";
 
         connection.Open();
         IEnumerable<T> records = connection.Query<T>(cmd);
@@ -63,12 +62,4 @@ internal class Model
         connection.Open();
         connection.Execute(cmd, new { Id = id });
     }
-
-    public static Dictionary<Type, string> TypeToTableName =
-        new Dictionary<Type, string>()
-    {
-        { typeof(DataObjects.Stack), "stacks" },
-        { typeof(DataObjects.Flashcard), "stack_flashcards" },
-        { typeof(DataObjects.StudySession), "study_sessions" },
-    };
 }
