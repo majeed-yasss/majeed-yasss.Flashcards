@@ -57,4 +57,22 @@ internal class Model
         connection.Open();
         connection.Execute(cmd, new { Id });
     }
+
+    internal void CreateFlashcard(Flashcard flashcard)
+    {
+        var connection = new SqlConnection(_connectionString);
+        string cmd =
+            $"insert into {Flashcard.TableName}(StackId, Front, Back) " +
+            $"values (@StackId, @Front, @Back)";
+
+        var param = new
+        {
+            flashcard.StackId,
+            flashcard.Front,
+            flashcard.Back
+        };
+
+        connection.Open();
+        connection.Execute(cmd, param);
+    }
 }

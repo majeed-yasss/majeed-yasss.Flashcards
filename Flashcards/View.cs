@@ -6,13 +6,13 @@ internal class View
     {
         Console.Clear();
         Rule r1 = new(MarkupMsg);
-        r1.LeftJustified();
+        r1.LeftJustified(); r1.RuleStyle("cyan");
 
         Rule r2 = new($"Current wroking stack: {name}");
-        r2.Centered();
+        r2.Centered(); r2.RuleStyle("green");
 
         Rule r3 = new($"Flashcards quantity: {quantity}");
-        r3.RightJustified();
+        r3.RightJustified(); r3.RuleStyle("yellow");
 
         AnsiConsole.Write(r1);
         AnsiConsole.Write(r2);
@@ -30,31 +30,22 @@ internal class View
 
         return Options.WelcomeMenuLabels[option];
     }
-    public static Options.MainMenu MainMenu(string name)
+    // Generic Enum Menu
+    public static T EnumMenu<T>(string title,string name) where T : struct, Enum
     {
-        Header("Main Menu", name, 0);
+        Header(title, name, 0);
         string option = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
-            .AddChoices(Enum.GetNames<Options.MainMenu>()));
+            .AddChoices(Enum.GetNames<T>()));
 
-        return Enum.Parse<Options.MainMenu>(option);
-    }
-    public static Options.WorkingStackMenu StackMenu(string name)
-    {
-        Header("Stack Menu", name, 0);
-        string option = AnsiConsole.Prompt(
-            new SelectionPrompt<string>()
-            .AddChoices(Enum.GetNames<Options.WorkingStackMenu>()));
-
-        return Enum.Parse<Options.WorkingStackMenu>(option);
+        return Enum.Parse<T>(option);
     }
     internal static void Exit()
     {
         //Console.Clear();
-        Console.WriteLine("exiting..");
+        Massage("exiting..");
         Environment.Exit(0);
     }
-
     internal static void Massage(string MarkupMsg)
     {
         AnsiConsole.WriteLine(MarkupMsg);
@@ -68,7 +59,10 @@ internal class View
         while (value is null || value.Length > limit);
         return value;
     }
-
+    internal static bool Confirm(string MarkupMsg,bool Default)
+    {
+        return AnsiConsole.Confirm(MarkupMsg, Default);
+    }
     internal static T Select<T>(IEnumerable<T> items, string MarkupMassage="") where T : notnull
     {
         Console.Clear();
