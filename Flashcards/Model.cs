@@ -22,18 +22,14 @@ internal class Model
 
         _connectionString = config.GetConnectionString("constr")?? "";
     }
-    public void LoadDatabase()
+    public Stack CreateStack(string Name)
     {
         var connection = new SqlConnection(_connectionString);
-        connection.Open();
-    }
-    public void CreateStack(string Name)
-    {
-        var connection = new SqlConnection(_connectionString);
-        string cmd = "insert into stacks(Name) values (@Name)";
+        string cmd = "insert into stacks(Name) values (@Name)" +
+            " SELECT * FROM Stacks WHERE Name = @Name";
 
         connection.Open();
-        connection.Execute(cmd, new { Name });
+        return connection.QuerySingle<Stack>(cmd, new { Name });
     }
     public IEnumerable<T> RetriveRecords<T>() where T : ITable
     {
@@ -52,12 +48,13 @@ internal class Model
         connection.Open();
         connection.Execute(cmd, new { Id, Name });
     }
-    public void Delete(ITable row) 
+    public void Delete<T>(T row) where T : ITable => Delete<T>(row.Id);
+    public void Delete<T>(int Id) where T : ITable
     {
         var connection = new SqlConnection(_connectionString);
-        string cmd = "delete from stacks where Id = @Id";
+        string cmd = $"delete from {T.TableName} where Id = @Id";
 
         connection.Open();
-        connection.Execute(cmd, new { row.Id });
+        connection.Execute(cmd, new { Id });
     }
 }
