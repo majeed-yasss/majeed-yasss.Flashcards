@@ -1,4 +1,5 @@
-﻿using Spectre.Console;
+﻿using DataObjects;
+using Spectre.Console;
 namespace Flashcards;
 internal class View
 {
@@ -72,5 +73,24 @@ internal class View
             new SelectionPrompt<T>()
             .Title(MarkupMassage)
             .AddChoices(items));
+    }
+
+    internal static void Show(IEnumerable<Flashcard> records, string title)
+    {
+        Table table = new();
+        table.AddColumn(new TableColumn("Front").Centered());
+        table.AddColumn(new TableColumn("Back").Centered());
+        foreach (var flashcard in records)
+        {
+            table.AddRow(flashcard.Front, flashcard.Back);
+        }
+
+        table.Title(title)
+        .ShowRowSeparators()
+        .RoundedBorder();
+
+        Console.Clear();
+        AnsiConsole.Write(table);
+        Massage("");
     }
 }

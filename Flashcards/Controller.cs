@@ -114,7 +114,8 @@ public class Controller
     }
     private static void ViewFlashcards()
     {
-        
+        var records = _model.RetriveRecords<Flashcard>();
+        View.Show(records,_currentStack.Name);
     }
 
 }
