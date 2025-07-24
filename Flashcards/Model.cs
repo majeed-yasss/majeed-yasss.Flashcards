@@ -26,7 +26,7 @@ internal class Model
     {
         var connection = new SqlConnection(_connectionString);
         string cmd = "insert into stacks(Name) values (@Name)" +
-            " SELECT * FROM Stacks WHERE Name = @Name";
+            " SELECT * FROM stacks WHERE Name = @Name";
 
         connection.Open();
         return connection.QuerySingle<Stack>(cmd, new { Name });
@@ -38,6 +38,16 @@ internal class Model
 
         connection.Open();
         IEnumerable<T> records = connection.Query<T>(cmd);
+        return records;
+    }
+    public IEnumerable<T> RetriveRecords<T>(int StackId) where T : ITable
+    {
+        var connection = new SqlConnection(_connectionString);
+        string cmd = $"Select * From {T.TableName} "
+        + $"WHERE StackId = @StackID";
+
+        connection.Open();
+        IEnumerable<T> records = connection.Query<T>(cmd, new { StackId });
         return records;
     }
     public void RenameStack(int Id, string Name)

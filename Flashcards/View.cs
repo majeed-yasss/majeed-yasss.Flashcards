@@ -49,7 +49,7 @@ internal class View
     }
     internal static void Massage(string MarkupMsg)
     {
-        AnsiConsole.WriteLine(MarkupMsg);
+        AnsiConsole.MarkupLine(MarkupMsg);
         Console.WriteLine("Press any key to continue");
         Console.ReadKey();
     }
@@ -77,13 +77,17 @@ internal class View
 
     internal static void Show(IEnumerable<Flashcard> records, string title)
     {
+        if (!records.Any())
+        {
+            Massage("[red]Empty Stack![/]"); return;
+        }
         Table table = new();
+        table.AddColumn(new TableColumn("ID").Centered());
         table.AddColumn(new TableColumn("Front").Centered());
         table.AddColumn(new TableColumn("Back").Centered());
+        int id = 0;
         foreach (var flashcard in records)
-        {
-            table.AddRow(flashcard.Front, flashcard.Back);
-        }
+            table.AddRow(Convert.ToString(++id),flashcard.Front, flashcard.Back);
 
         table.Title(title)
         .ShowRowSeparators()

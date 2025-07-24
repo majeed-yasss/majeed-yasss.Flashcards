@@ -94,7 +94,7 @@ public class Controller
     private static void ChangeCurrentStack()
     {
         var records = _model.RetriveRecords<Stack>();
-        if (records.Count() == 0) _currentStack = null;
+        if (!records.Any()) _currentStack = null;
         else _currentStack = View.Select(records,
             "Select the [green]Stack[/] you want to work with:");
     }
@@ -114,7 +114,7 @@ public class Controller
     }
     private static void ViewFlashcards()
     {
-        var records = _model.RetriveRecords<Flashcard>();
+        var records = _model.RetriveRecords<Flashcard>(_currentStack.Id);
         View.Show(records,_currentStack.Name);
     }
 
