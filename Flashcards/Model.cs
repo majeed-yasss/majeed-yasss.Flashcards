@@ -58,6 +58,15 @@ internal class Model
         connection.Open();
         connection.Execute(cmd, new { Id, Name });
     }
+    public bool IsExistStack(string Name)
+    {
+        var connection = new SqlConnection(_connectionString);
+        string cmd ="SELECT 1 FROM stacks WHERE Name = @Name";
+
+        connection.Open();
+        int? res = connection.QuerySingleOrDefault<int>(cmd, new { Name });
+        return res is not null && res > 0;
+    }
     public void Delete<T>(T row) where T : ITable => Delete<T>(row.Id);
     public void Delete<T>(int Id) where T : ITable
     {

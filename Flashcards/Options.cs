@@ -13,9 +13,9 @@ internal static class Options
             { "Create your first Stack" , WelcomeMenu.Create },
             { "Exit" , WelcomeMenu.Exit }
         };
-    public enum MainMenu { Stacks, Study, Sessions, Exit }
+    public enum MainMenu { Flashcards, Stacks, Study, Sessions, Exit }
     //public static Dictionary<string, MainMenu> MainMenuLabels = ...
-    public enum WorkingStackMenu { Flashcards, Change, Create, Delete, Return }
+    public enum WorkingStackMenu { Change, Create, Rename, Delete, Return }
     //public static Dictionary<string, WorkingStackMenu> WorkingStackMenuLabels = ...
     public enum FlashcardsMenu { Create, View, Edit, Delete, Return }
 }

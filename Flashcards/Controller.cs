@@ -31,6 +31,7 @@ public class Controller
         if (_currentStack is null) return;
         switch (option)
         {
+            case Options.MainMenu.Flashcards: FlashcardsMgr(); break;
             case Options.MainMenu.Stacks: StacksMgr(); break;
             case Options.MainMenu.Study: StartStudy(); break;
             case Options.MainMenu.Sessions: Sessions(); break;
@@ -44,9 +45,9 @@ public class Controller
             .EnumMenu<Options.WorkingStackMenu>("Stack Menu",_currentStack.Name);
         switch (option)
         {
-            case Options.WorkingStackMenu.Flashcards: FlashcardsMgr(); break;
             case Options.WorkingStackMenu.Change: ChangeCurrentStack(); break;
             case Options.WorkingStackMenu.Create: CreateStack(); break;
+            case Options.WorkingStackMenu.Rename: RenameStack(); break;
             case Options.WorkingStackMenu.Delete: DeleteStack(); break;
             
             default: break;
@@ -60,21 +61,32 @@ public class Controller
     }
     private static void CreateStack()
     {
-        bool unique = false;
-        do
-        {
-            string name = View.Read("Enter Stack Name: ", 50);
-            try
-            {
-                _currentStack = _model.CreateStack(name);
-                unique = true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-        } while (!unique);
-        
+        //bool unique = false;
+        //do
+        //{
+        //    string name = View.Read("Enter Stack Name: ", 50);
+        //    try
+        //    {
+        //        _currentStack = _model.CreateStack(name);
+        //        unique = true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine(ex.Message);
+        //    }
+        //} while (!unique);
+
+        string name;
+        do name = View.Read("Enter Stack Name: ", 50);
+        while (_model.IsExistStack(name));
+        _model.CreateStack(name);
+    }
+    private static void RenameStack()
+    {
+        string name;
+        do name = View.Read("Enter Stack Name: ", 50);
+        while (_model.IsExistStack(name));
+        _model.RenameStack(_currentStack.Id,name);
     }
     private static void FlashcardsMgr()
     {
