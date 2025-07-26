@@ -19,5 +19,5 @@ public class Flashcard : ITable
     public string Front { get; set; }
     public string Back { get; set; }
     public override string ToString() =>
-        $"ID: {Id}\nFront: {Front}\nBack: {Back}";
+        $"Front: {Front}\n  Back: {Back}";
 }

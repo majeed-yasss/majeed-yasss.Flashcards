@@ -138,7 +138,7 @@ public class Controller
     private static void EditFlashcard()
     {
         var records = _model.RetriveRecords<Flashcard>(_currentStack.Id);
-        if (records is null)
+        if (!records.Any())
         {
             View.Massage($"{_currentStack.Name} Stack has no Flashcards!");
             return;
