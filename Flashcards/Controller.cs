@@ -61,21 +61,6 @@ public class Controller
     }
     private static void CreateStack()
     {
-        //bool unique = false;
-        //do
-        //{
-        //    string name = View.Read("Enter Stack Name: ", 50);
-        //    try
-        //    {
-        //        _currentStack = _model.CreateStack(name);
-        //        unique = true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //    }
-        //} while (!unique);
-
         string name;
         do name = View.Read("Enter Stack Name: ", 50);
         while (_model.IsExistStack(name));
@@ -84,9 +69,10 @@ public class Controller
     private static void RenameStack()
     {
         string name;
-        do name = View.Read("Enter Stack Name: ", 50);
+        do name = View.Read("Enter [red](Unique)[/] Stack Name: ", 50);
         while (_model.IsExistStack(name));
         _model.RenameStack(_currentStack.Id,name);
+        _currentStack.Name = name;
     }
     private static void FlashcardsMgr()
     {
@@ -98,7 +84,7 @@ public class Controller
             case Options.FlashcardsMenu.Create: CreateFlashcard(); break;
             case Options.FlashcardsMenu.View: ViewFlashcards(); break;
             case Options.FlashcardsMenu.Edit: EditFlashcard(); break;
-            //case Options.FlashcardsMenu.Delete: DeleteFlashcard(); break;
+            case Options.FlashcardsMenu.Delete: DeleteFlashcard(); break;
 
             default: break;
         };
@@ -125,7 +111,7 @@ public class Controller
     {
         Flashcard card = MockFlashcard();
         
-        if (View.Confirm($"{card}\n[yellow]Create Card?[/]", true))
+        if (View.Confirm($"  {card}\n[yellow]Create Card?[/]", true))
             _model.CreateFlashcard(card);
         if (View.Confirm("Create [yellow]another Flashcard?[/]", false))
             CreateFlashcard();
@@ -145,12 +131,12 @@ public class Controller
         }
 
         Flashcard toEdit = View.Select<Flashcard>(records, _currentStack.Name);
-        if (!View.Confirm($"{toEdit}\n Proceed [yellow]Editing this card?[/]", true))
+        if (!View.Confirm($"  {toEdit}\n Proceed [yellow]Editing this card?[/]", true))
             return;
 
         Flashcard newCard = MockFlashcard();
-        string msg = $"Before:\n{toEdit}\n" +
-                    $"After:\n{newCard}\n" +
+        string msg = $"Before:\n  {toEdit}\n" +
+                    $"After:\n  {newCard}\n" +
                     $"[yellow]Confirm Edit?[/]";
 
         if (View.Confirm(msg, true)) _model.EditFlashcard(toEdit.Id, newCard);
@@ -158,5 +144,20 @@ public class Controller
         if (View.Confirm("Edit [yellow]another Flashcard?[/]", false))
             EditFlashcard();
     }
+    private static void DeleteFlashcard()
+    {
+        var records = _model.RetriveRecords<Flashcard>(_currentStack.Id);
+        if (!records.Any())
+        {
+            View.Massage($"{_currentStack.Name} Stack has no Flashcards!");
+            return;
+        }
 
+        Flashcard toDelete = View.Select<Flashcard>(records, _currentStack.Name);
+        if (View.Confirm($"  {toDelete}\n [red]Delete this card?[/]", true))
+            _model.Delete<Flashcard>(toDelete.Id);
+
+        if (View.Confirm("Delete [red]another Flashcard?[/]", false))
+            DeleteFlashcard();
+    }
 }
