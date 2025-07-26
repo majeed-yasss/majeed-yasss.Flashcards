@@ -97,7 +97,7 @@ public class Controller
         {
             case Options.FlashcardsMenu.Create: CreateFlashcard(); break;
             case Options.FlashcardsMenu.View: ViewFlashcards(); break;
-            //case Options.FlashcardsMenu.Edit: EditFlashcard(); break;
+            case Options.FlashcardsMenu.Edit: EditFlashcard(); break;
             //case Options.FlashcardsMenu.Delete: DeleteFlashcard(); break;
 
             default: break;
@@ -115,19 +115,48 @@ public class Controller
         _model.Delete<Stack>(_currentStack);
         ChangeCurrentStack();
     }
+    private static Flashcard MockFlashcard()
+    {
+        string front = View.Read("Enter the question (card's front):", 100);
+        string back = View.Read("Enter the answer (card's back):", 100);
+        return new Flashcard(_currentStack.Id, front, back);
+    }
     private static void CreateFlashcard()
     {
-        string front = View.Read("read front", 100);
-        string back = View.Read("read back", 100);
-        _model.CreateFlashcard(new Flashcard(
-          _currentStack.Id, front, back));
-        if (View.Confirm("Create another Flashcard?", false))
+        Flashcard card = MockFlashcard();
+        
+        if (View.Confirm($"{card}\n[yellow]Create Card?[/]", true))
+            _model.CreateFlashcard(card);
+        if (View.Confirm("Create [yellow]another Flashcard?[/]", false))
             CreateFlashcard();
     }
     private static void ViewFlashcards()
     {
         var records = _model.RetriveRecords<Flashcard>(_currentStack.Id);
         View.Show(records,_currentStack.Name);
+    }
+    private static void EditFlashcard()
+    {
+        var records = _model.RetriveRecords<Flashcard>(_currentStack.Id);
+        if (records is null)
+        {
+            View.Massage($"{_currentStack.Name} Stack has no Flashcards!");
+            return;
+        }
+
+        Flashcard toEdit = View.Select<Flashcard>(records, _currentStack.Name);
+        if (!View.Confirm($"{toEdit}\n Proceed [yellow]Editing this card?[/]", true))
+            return;
+
+        Flashcard newCard = MockFlashcard();
+        string msg = $"Before:\n{toEdit}\n" +
+                    $"After:\n{newCard}\n" +
+                    $"[yellow]Confirm Edit?[/]";
+
+        if (View.Confirm(msg, true)) _model.EditFlashcard(toEdit.Id, newCard);
+
+        if (View.Confirm("Edit [yellow]another Flashcard?[/]", false))
+            EditFlashcard();
     }
 
 }

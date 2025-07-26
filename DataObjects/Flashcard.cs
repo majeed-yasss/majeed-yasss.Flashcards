@@ -18,4 +18,6 @@ public class Flashcard : ITable
     public int StackId { get; set; }
     public string Front { get; set; }
     public string Back { get; set; }
+    public override string ToString() =>
+        $"ID: {Id}\nFront: {Front}\nBack: {Back}";
 }

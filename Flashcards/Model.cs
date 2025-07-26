@@ -94,4 +94,22 @@ internal class Model
         connection.Open();
         connection.Execute(cmd, param);
     }
+    internal void EditFlashcard(int id, Flashcard flashcard)
+    {
+        var connection = new SqlConnection(_connectionString);
+        string cmd =
+            $"UPDATE {Flashcard.TableName}" +
+            $" SET Front = @Front, Back = @Back" +
+            $" WHERE Id = @Id";
+
+        var param = new
+        {
+            Id = id,
+            flashcard.Front,
+            flashcard.Back
+        };
+
+        connection.Open();
+        connection.Query<Flashcard>(cmd, param);
+    }
 }
