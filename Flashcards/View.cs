@@ -69,6 +69,8 @@ internal class View
         Console.Clear();
         AnsiConsole.Write(new Rule());
 
+        if (!items.Any()) return default;
+
         return AnsiConsole.Prompt(
             new SelectionPrompt<T>()
             .Title(MarkupMassage)
